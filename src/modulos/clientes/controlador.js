@@ -1,27 +1,28 @@
-const db = require('../../db/mysql.js');
+const defaultDb = require('../../db/mysql.js');
 
 const TABLA = 'clientes';
 
-function todos() {
-    return db.todos(TABLA);
-}
+module.exports = function (dbInyectada = defaultDb) {
+    function todos() {
+        return dbInyectada.todos(TABLA);
+    }
 
-function uno(id) {
-    return db.uno(TABLA, id);
-}
+    function uno(id) {
+        return dbInyectada.uno(TABLA, id);
+    }
 
-function agregar(body) {
-    return db.agregar(TABLA, body);
-}
+    function agregar(body) {
+        return dbInyectada.agregar(TABLA, body);
+    }
 
-function eliminar(body) {
-    return db.eliminar(TABLA, body);
-}
+    function eliminar(body) {
+        return dbInyectada.eliminar(TABLA, body);
+    }
 
-
-module.exports = {
-    todos,
-    uno,
-    eliminar,
-    agregar,
+    return {
+        todos,
+        uno,
+        agregar,
+        eliminar,
+    };
 };
