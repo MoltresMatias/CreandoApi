@@ -54,29 +54,14 @@ function uno(tabla, id) {
     });
 }
 
-function insertar(tabla, data) {
-    return new Promise((resolve, reject) => {
-        conexion.query(`INSERT INTO ${tabla} SET ?`, data, (error, result) => {
-            return error ? reject(error) : resolve(result);
-        });
-    });
-}
-
-function actualizar(tabla, data) {
-    return new Promise((resolve, reject) => {
-        conexion.query(`UPDATE ${tabla} SET ? WHERE id = ?`, [data, data.id], (error, result) => {
-            return error ? reject(error) : resolve(result);
-        });
-    });
-}
-
 function agregar(tabla, data) {
-    if (data && data.id == 0) {
-        return insertar(tabla, data);
-    } else {
-        return actualizar(tabla, data);
-    }
+    return new Promise((resolve, reject) => {
+        conexion.query(`INSERT INTO ${tabla} SET ? ON DUPLICATE KEY UPDATE ?`, [data, data], (error, result) => {
+            return error ? reject(error) : resolve(result);
+        });
+    });
 }
+
 
 function eliminar(tabla, data) {
     return new Promise((resolve, reject) => {
@@ -85,10 +70,17 @@ function eliminar(tabla, data) {
         });
     });
 }
-
+function query(tabla, consulta) {
+    return new Promise((resolve, reject) => {
+        conexion.query(`SELECT * FROM ${tabla} WHERE ?`, consulta, (error, result) => {
+            return error ? reject(error) : resolve(result[0]);
+        });
+    });
+}
 module.exports = {
     todos,
     uno,
     agregar,
     eliminar,
+    query
 }

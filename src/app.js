@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 const clientes = require('./modulos/clientes/rutas');
 const usuarios = require('./modulos/usuarios/rutas');
+const auth = require('./modulos/auth/rutas');
 const error = require('./red/errors');
 
 
@@ -15,11 +16,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //configuraciones
-app.set('port', config.app.port)
+app.set('port', config.app.port);
 
 //Rutas
-app.use('/api/clientes', clientes)
-app.use('/api/usuarios', usuarios)
-app.use(error)
+app.use('/api/clientes', clientes);
+app.use('/api/usuarios', usuarios);
+app.use('/api/auth', auth);
+
+app.use(error);
 
 module.exports = app;
