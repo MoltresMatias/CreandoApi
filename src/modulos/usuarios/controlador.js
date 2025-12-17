@@ -4,13 +4,14 @@ const auth = require('../auth');
 const TABLA = 'usuarios';
 
 module.exports = function (dbInyetada) {
-
     let db = dbInyetada;
     if (!db) {
         db = require('../../db/mysql.js');
     }
+
     function todos() {
-        return db.todos(TABLA);
+        // Solo devuelve usuarios activos
+        return db.query(TABLA, { activo: 1 });
     }
 
     function uno(id) {
@@ -21,10 +22,12 @@ module.exports = function (dbInyetada) {
         const usuario = {
             id: body.id,
             nombre: body.nombre,
-            activo: body.activo,
+            activo: body.activo ?? 1, // por defecto activo
         }
+
         const respuesta = await db.agregar(TABLA, usuario);
         console.log("respuesta", respuesta);
+
         var insertId = 0;
         if (body.id == 0) {
             insertId = respuesta.insertId;
@@ -43,9 +46,14 @@ module.exports = function (dbInyetada) {
         return respuesta2;
     }
 
-    function eliminar(body) {
-        return db.eliminar(TABLA, body);
+    async function eliminar(body) {
+        // Primero borro credenciales en auth
+        await auth.eliminar(body.id);
+
+        // Luego hago soft delete en usuarios
+        return db.actualizar(TABLA, { activo: 0 }, body.id);
     }
+
     return {
         todos,
         uno,

@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const TABLA = 'auth';
 
 module.exports = function (dbInyetada) {
-
     let db = dbInyetada;
     if (!db) {
         db = require('../../db/mysql.js');
@@ -25,11 +24,9 @@ module.exports = function (dbInyetada) {
     }
 
     async function agregar(data) {
-
         const authData = {
             id: data.id,
         }
-
 
         if (data.usuario) {
             authData.usuario = data.usuario;
@@ -42,8 +39,14 @@ module.exports = function (dbInyetada) {
         return db.agregar(TABLA, authData);
     }
 
+    async function eliminar(id) {
+        // Hard delete en auth (no tiene sentido conservar credenciales)
+        return db.eliminar(TABLA, { id: id });
+    }
+
     return {
         agregar,
-        login
+        login,
+        eliminar
     };
 };

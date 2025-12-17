@@ -5,9 +5,12 @@ const controlador = require('./index.js');
 const router = express.Router();
 
 
+//Ruta publica para crear usuarios
+router.post('/', agregar);
+
+//Rutas protegidas para el resto de operaciones
 router.get('/', todos);
 router.get('/:id', uno);
-router.post('/', seguridad(), agregar);
 router.put('/', seguridad(), eliminar)
 
 
