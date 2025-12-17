@@ -18,10 +18,8 @@ function conMysql() {
     conexion.connect((err) => {
         if (err) {
             console.log('[Error de conexion]', err);
-            setTimeout(conMysql, 200);
-        } else {
-            console.log('Base de datos conectada');
         }
+        console.log('Base de datos conectada')
     });
 
     conexion.on('error', (err) => {
