@@ -9,10 +9,11 @@ module.exports = {
         secret: process.env.JWT_SECRET || 'clave_secreta',
     },
     mysql: {
-        host: process.env.MYSQL_HOST || 'localhost',
-        user: process.env.MYSQL_USER || 'root',
-        password: process.env.MYSQL_PASSWORD || '1230',
-        database: process.env.MYSQL_DATABASE || 'ejemplo',
-        port: process.env.MYSQL_PORT || "3307",
+        host: process.env.MYSQLHOST,      // Railway inyecta esta variable
+        user: process.env.MYSQLUSER,
+        password: process.env.MYSQLPASSWORD,
+        database: process.env.MYSQLDATABASE,
+        port: process.env.MYSQLPORT,
     }
+
 }
